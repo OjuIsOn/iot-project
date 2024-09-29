@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cycles</title>
+</head>
+<body>
+    <h1>Your Cycles</h1>
+    <form action="/api/cycle/addCycle" method="POST">
+        <label for="name">name of the cycle</label>
+        <input type="text" name="name">
+        <button type="submit">add cycle</button>
+    </form>
+
+    <% if (cycles && cycles.length > 0) { %>
+        <ul>
+            <% cycles.forEach(function(cycle) { %>
+                <li>
+                    <strong>Cycle Name:</strong> <%= cycle.name %><br>
+                    <strong>Status:</strong> <%= cycle.status === 'locked' ? '🔒 Locked' : '🔓 Unlocked' %>
+                    <form action="/api/cycle/<%= cycle.status === 'locked' ? 'unlock' : 'lock' %>" method="POST">
+                        <button type="submit">
+                            <%= cycle.status === 'locked' ? 'Unlock' : 'Lock' %>
+                        </button>
+                        <input type="hidden" name="cycleId" value="<%= cycle._id %>">
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No cycles found</p>
+    <% } %>
+    
+
+</body>
+</html>
