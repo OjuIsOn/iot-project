@@ -28,7 +28,7 @@ app.use(express.urlencoded({extended:false}))
 
 
 app.get("/",(req,res)=>{
-    res.render("home")
+    res.render("home page")
 })
 
 app.use("/api/user",userRoutes);
@@ -41,3 +41,4 @@ app.listen(process.env.PORT || 8000,()=>{
 
 
 //https://1c43-49-156-109-221.ngrok-free.app/
+
