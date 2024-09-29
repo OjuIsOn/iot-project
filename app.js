@@ -33,7 +33,7 @@ app.get("/",(req,res)=>{
 
 app.use("/api/user",userRoutes);
 
-app.use("/api/cycle",restrictToLoggedinUser,cycleRoutes);
+app.use("/api/cycle",cycleRoutes);
 
 app.listen(process.env.PORT || 8000,()=>{
     console.log("Server is listening");
