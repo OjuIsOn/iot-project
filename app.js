@@ -28,7 +28,7 @@ app.use(express.urlencoded({extended:false}))
 
 
 app.get("/",(req,res)=>{
-    res.render("home page")
+    res.render("home")
 })
 
 app.use("/api/user",userRoutes);
