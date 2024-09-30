@@ -33,7 +33,7 @@ router.get('/', restrictToLoggedinUser, async (req, res) => {
 });
 
 let cycleState = {
-    openLock: 0, // 0 = locked, 1 = unlocked
+    openLock: 1, // 0 = locked, 1 = unlocked
     buzz: 1      // 0 = no buzz, 1 = buzzer on
 };
 
