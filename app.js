@@ -23,12 +23,10 @@ mongoose.connect(process.env.MONGODB_URI,{ serverSelectionTimeoutMS: 5000})
 app.set("view engine","ejs");
 app.set("views",path.resolve("./views"));
 
+
+app.use(cors()); // To enable cross-origin requests
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
-app.use(cors({
-    origin: '*', // Add localhost during development
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  }));
   
 
 app.get("/",(req,res)=>{

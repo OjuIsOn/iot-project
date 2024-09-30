@@ -65,6 +65,35 @@ router.post("/addCycle",restrictToLoggedinUser,async (req,res)=>{
     }
 })
 
+
+
+
+router.post('/location', (req, res) => {
+  // Log the incoming request body (the GPS data)
+  console.log('Received GPS data:', req.body);
+
+  // Extract latitude and longitude from the request body
+  const { latitude, longitude } = req.body;
+
+  // Check if the data is valid
+  if (latitude && longitude) {
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+    // You can now store the data in a database, send it to another service, or process it further
+    // For now, just send a success response back to the ESP32
+    res.status(200).json({
+      message: 'Location data received successfully!',
+      receivedData: req.body,
+    });
+  } else {
+    res.status(400).json({ message: 'Invalid GPS data received.' });
+  }
+});
+
+
+
+
+
 // Lock the cycle
 router.post('/lock', restrictToLoggedinUser, async (req, res) => {
     // sendsSignaltoController()
