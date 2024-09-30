@@ -79,13 +79,14 @@ router.post('/location', (req, res) => {
   // Check if the data is valid
   if (latitude && longitude) {
     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    
+    const a = Integer.parseInt(latitude);
+    const b=Integer.parseInt(longitude);
 
     // You can now store the data in a database, send it to another service, or process it further
     // For now, just send a success response back to the ESP32
     res.status(200).json({
         message: 'Location data received successfully!',
-        receivedData: req.body,
+        receivedData: a,
       });
   } else {
     res.status(400).json({ message: 'Invalid GPS data received.' });
