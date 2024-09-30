@@ -79,12 +79,7 @@ router.post('/location', (req, res) => {
   // Check if the data is valid
   if (latitude && longitude) {
     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    latitude=Integer.parseInt(latitude);
-    longitude=Integer.parseInt(longitude);
-    if(longitude*longitude+latitude*latitude>25){
-        cycleState.buzz=1;
-        cycleState.openLock=0;
-    }
+    
 
     // You can now store the data in a database, send it to another service, or process it further
     // For now, just send a success response back to the ESP32
