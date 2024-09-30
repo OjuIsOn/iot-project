@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    <link rel="stylesheet" href="/Styles/maps.css">
+    <title>Real Time Location</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">LockIt</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#" class="contact-link" style="color: black;">Contact Us</a>
+        </div>
+    </nav>
+
+    <div class="title">Real Time Location</div>
+    <div id="map" style="height:500px width:100vw"></div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">LockIt</div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Services</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 LockIt. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+    var map = L.map('map').setView([0,0], 17);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+navigator.geolocation.watchPosition(success, error, {
+    enableHighAccuracy: true, // Use GPS and other high-accuracy methods
+    timeout: 5000, // Maximum time to wait for a position update (in ms)
+    maximumAge: 0 // Do not use a cached position
+  });
+
+let marker,circle;
+
+var squareIcon = L.divIcon({
+    className: 'custom-square-icon',
+    iconSize: [10, 10],
+});
+
+function success(pos){
+    const lat =29.9420886;
+    const lng=76.8195012;
+    const accuracy= pos.coords.accuracy;
+
+    if(marker){
+        map.removeLayer(marker);
+        map.removeLayer(circle);
+    }
+
+    marker=L.marker([lat,lng]).addTo(map);
+    circle=L.circle([lat,lng], { radius: accuracy}).addTo(map);
+
+    L.marker([29.945562,76.816042], { icon: squareIcon }).addTo(map)
+            .bindPopup('I am a square-shaped marker!');
+
+    map.fitBounds(circle.getBounds());
+
+    map.setView([lat,lng]);
+
+    console.log("The current lat is "+lat);
+    console.log("The current lng is "+ lng);
+    console.log("The accuracy is around "+accuracy);
+}
+
+function error(err){
+
+    if(err.code===1){
+        alert("Please allow geolocation access");
+    }else{
+        alert("Error !!");
+    }
+}
+</script>
+</body>
+</html>

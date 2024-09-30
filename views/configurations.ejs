@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/configurations.css">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">LockIt</div>
+        <div class="nav-links">
+            <a href="login.html" class="login-link">Login</a>
+            <a href="menu.html" class="contact-link" style="color: black;">Contact Us</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="section-title">User Configs</div>
+        <ul class="user-info">
+            <% users.forEach(user => { %>
+            <li class="user-item">
+                <h2><%= user.name %></h2>
+                <p>Email: <%= user.email %></p>
+                <p>Cycle ID: <%= user.cycleId %></p>
+            </li>
+        <% }); %>
+        </ul>
+    </main>
+    <footer>
+        <div class="footer-container">
+          <div class="footer-content">
+            <div class="footer-logo">
+              <h2>LockIt</h2>
+            </div>
+            <div class="footer-links">
+              <a href="#">About Us</a>
+              <a href="#">Services</a>
+              <a href="#">Contact</a>
+              <a href="#">Privacy Policy</a>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <p>&copy; 2024 LockIt. All rights reserved.</p>
+          </div>
+        </div>
+    </footer>
+</body>
+</html>

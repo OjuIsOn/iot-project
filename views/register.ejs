@@ -3,19 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>register</title>
+    <title>Register</title>
+    <link rel="stylesheet" href="/styles/register.css">
 </head>
-<body>
-    <form action="/api/user/register" method="POST">
-        <label for="name">Name</label>
-        <input type="text" name="name">
-        <label for="email">Email</label>
-        <input type="text" name="email">
-        <label for="password">password</label>
-        <input type="text" name="password">
-        <label for="cycleNum">Cycle No.</label>
-        <input type="text" name="cycleNum">
-        <button type="submit">confirm</button>
-    </form>
+<body>  
+    <nav class="main-nav">  
+        <div class="logo">LockIt</div>
+        <div class="nav-links">
+            <a href="/" class="home-link">Home</a>
+            <a href="#" class="contact-link" style="color: black;">Contact Us</a>
+        </div>
+    </nav>
+    <div class="register-container">
+        <h2 class="register-title">Register</h2>
+        <form  action="/api/user/register" method="POST">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="form-group">
+                <label for="cycleNum">Cycle ID</label>
+                <input type="text" id="cycleNum" name="cycleNum" placeholder="Enter your Cycle ID" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+    <footer class="main-footer">
+        <div class="footer-container">
+          <div class="footer-content">
+            <div class="footer-logo">
+              <h2>LockIt</h2>
+            </div>
+            <div class="footer-links">
+              <a href="#">About Us</a>
+              <a href="#">Services</a>
+              <a href="#">Contact</a>
+              <a href="#">Privacy Policy</a>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <p>&copy; 2024 LockIt. All rights reserved.</p>
+          </div>
+        </div>
+    </footer>
 </body>
 </html>
