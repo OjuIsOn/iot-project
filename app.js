@@ -26,7 +26,7 @@ app.set("views",path.resolve("./views"));
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
 app.use(cors({
-    origin:['https://iot-project-blond.vercel.app'], // Add localhost during development
+    origin: '*', // Add localhost during development
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   }));
   
