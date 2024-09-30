@@ -5,7 +5,7 @@ const { restrictToLoggedinUser } = require('../middlewares/auth');
 const Cycle =require('../models/cycle');
 const { error } = require('console');
 const {sendSignalToController}=require("../middlewares/controlSignals")
-
+const {cycleState}=require("../models/overallStatus")
 // this is the home page for cycle
 // that's what displays cycles of user on the page 
 //it render cycles.ejs in views folder 
@@ -31,11 +31,6 @@ router.get('/', restrictToLoggedinUser, async (req, res) => {
         res.status(500).json({ message: 'Error fetching cycles', error });
     }
 });
-
-let cycleState = {
-    openLock: 1, // 0 = locked, 1 = unlocked
-    buzz: 1      // 0 = no buzz, 1 = buzzer on
-};
 
 
 
@@ -122,6 +117,7 @@ router.post('/lock', restrictToLoggedinUser, async (req, res) => {
         }
 
         cycle.status = 'locked';
+        cycleState.openLock=0;
         await cycle.save();
 
         await History.create({
@@ -156,6 +152,7 @@ router.post('/unlock', restrictToLoggedinUser, async (req, res) => {
         }
 
         cycle.status = 'unlocked';
+        cycleState.openLock=1;
         await cycle.save();
 
         await History.create({
