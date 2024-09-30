@@ -82,13 +82,13 @@ router.post("/addCycle",restrictToLoggedinUser,async (req,res)=>{
 
 
 
-router.post('/location', (req, res) => {
+router.post('/location', async (req, res) => {
     try {
       console.log('Received GPS data:', req.body);
   
       const { latitude, longitude } = req.body;
   
-      const currentData = readData();
+      const currentData = await readData();
   
       if (!isNaN(latitude) && !isNaN(longitude)) {
         const latitudeFloat = parseFloat(latitude);
@@ -105,7 +105,7 @@ router.post('/location', (req, res) => {
           currentData.buzz = 0; 
           currentData.openLock = 1; 
         }
-        writeData(currentData);
+        await writeData(currentData);
   
         res.status(200).json({
           message: 'Location data received successfully!',
