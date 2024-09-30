@@ -82,9 +82,9 @@ router.post('/location', (req, res) => {
     const a = Integer.parseInt(latitude);
     const b=Integer.parseInt(longitude);
 
-    let latitudeInt = Math.trunc(parseFloat(latitude));   // Truncates to the integer part
-    let longitudeInt = Math.trunc(parseFloat(longitude));
-    
+    let latitudeInt = Math.round(parseFloat(latitude));   
+    let longitudeInt = Math.round(parseFloat(longitude));
+
     res.status(200).json({
         message: 'Location data received successfully!',
         receivedData: req.body,
