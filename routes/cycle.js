@@ -117,8 +117,6 @@ router.post('/lock', restrictToLoggedinUser, async (req, res) => {
         if (!cycle) {
             return res.status(404).json({ message: 'Cycle not found' });
         }
-        const esp32Response = await sendSignalToController('lock');
-
         if (cycle.status === 'locked') {
             return res.status(400).json({ message: 'Cycle is already locked' });
         }
@@ -152,7 +150,6 @@ router.post('/unlock', restrictToLoggedinUser, async (req, res) => {
             return res.status(404).json({ message: 'Cycle not found' });
         }
 
-        const esp32Response = await sendSignalToController('unlock');
         
         if (cycle.status === 'unlocked') {
             return res.status(400).json({ message: 'Cycle is already unlocked' });

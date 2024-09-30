@@ -10,6 +10,7 @@ Router.get("/register",(req,res)=>{
 })
 Router.get("/login",(req,res)=>{
     res.render("login");
+
 })
 
 Router.post("/register",async (req,res)=>{
@@ -63,7 +64,7 @@ Router.post("/login",async (req,res)=>{
     
     console.log(res.cookie);
 
-    res.redirect("/api/cycle");
+    res.redirect("/api/menu");
 
 })
 

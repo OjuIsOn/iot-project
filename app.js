@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI,{ serverSelectionTimeoutMS: 5000})
 
 app.set("view engine","ejs");
 app.set("views",path.resolve("./views"));
-
+app.use(express.static('public'));
 
 app.use(cors()); // To enable cross-origin requests
 app.use(cookieParser())
@@ -36,6 +36,14 @@ app.get("/",(req,res)=>{
 app.use("/api/user",userRoutes);
 
 app.use("/api/cycle",cycleRoutes);
+
+app.get('/api/menu', (req, res) => {
+    res.render('menu'); // Renders the 'second-page.ejs' template
+  });
+
+app.get('/api/maps', (req, res) => {
+    res.render('maps'); // Renders the 'second-page.ejs' template
+  });
 
 app.listen(process.env.PORT || 8000,()=>{
     console.log("Server is listening");
