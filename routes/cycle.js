@@ -83,6 +83,7 @@ router.post('/location', (req, res) => {
   // Extract latitude and longitude from the request body
   const { latitude, longitude } = req.body;
 
+  const currentData = readData();
   
   // Check if the data is valid
   if (latitude && longitude) {
@@ -90,7 +91,6 @@ router.post('/location', (req, res) => {
     
     let latitudeInt = parseInt(latitude, 10);   // Converts to base-10 integer
     let longitudeInt = parseInt(longitude, 10);
-    const currentData = readData();
 
         // Update the object with new values if provided
 
