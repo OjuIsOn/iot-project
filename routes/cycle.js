@@ -10,17 +10,24 @@ const {sendSignalToController}=require("../middlewares/controlSignals")
 
 const DATA_PATH = path.join(__dirname, '..', 'models', 'overallStatus.json');
 
-
-const readData = () => {
-    const rawData = fs.readFileSync(DATA_PATH);
-    return JSON.parse(rawData);
-  };
+function readData() {
+    try {
+      const rawData = fs.readFileSync(DATA_PATH, 'utf8');
+      return JSON.parse(rawData);
+    } catch (error) {
+      console.error('Error reading data from file:', error);
+      return {}; 
+    }
+  }
   
-  // Helper function to write updated data back to the JSON file
-const writeData = (data) => {
-    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
-};
-  
+  function writeData(data) {
+    try {
+      fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
+      console.log('Data written to file successfully.');
+    } catch (error) {
+      console.error('Error writing data to file:', error);
+    }
+  }
 // this is the home page for cycle
 // that's what displays cycles of user on the page 
 //it render cycles.ejs in views folder 
@@ -75,45 +82,45 @@ router.post("/addCycle",restrictToLoggedinUser,async (req,res)=>{
 
 
 
-
 router.post('/location', (req, res) => {
-  // Log the incoming request body (the GPS data)
-  console.log('Received GPS data:', req.body);
-
-  // Extract latitude and longitude from the request body
-  const { latitude, longitude } = req.body;
-
-  const currentData = readData();
+    try {
+      console.log('Received GPS data:', req.body);
   
-  // Check if the data is valid
-  if (latitude && longitude) {
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    
-    let latitudeInt = parseInt(latitude, 10);   // Converts to base-10 integer
-    let longitudeInt = parseInt(longitude, 10);
-
-        // Update the object with new values if provided
-
-        // Write the updated object back to the JSON file
-        
-        if(latitudeInt*latitudeInt+longitudeInt*longitudeInt>25){
-            currentData.buzz=1;
-            currentData.openLock=0;
-        }
-        else{
-            currentData.buzz=0;
+      const { latitude, longitude } = req.body;
+  
+      const currentData = readData();
+  
+      if (!isNaN(latitude) && !isNaN(longitude)) {
+        const latitudeFloat = parseFloat(latitude);
+        const longitudeFloat = parseFloat(longitude);
+  
+        console.log(`Latitude: ${latitudeFloat}, Longitude: ${longitudeFloat}`);
+  
+        const distanceSquared = latitudeFloat * latitudeFloat + longitudeFloat * longitudeFloat;
+  
+        if (distanceSquared > 25) {
+          currentData.buzz = 1; 
+          currentData.openLock = 0; 
+        } else {
+          currentData.buzz = 0; 
+          currentData.openLock = 1; 
         }
         writeData(currentData);
-
-    res.status(200).json({
-        message: 'Location data received successfully!',
-        receivedData: req.body,
-      });
-  } else {
-    res.status(400).json({ message: 'Invalid GPS data received.' });
-  }
   
-});
+        res.status(200).json({
+          message: 'Location data received successfully!',
+          receivedData: req.body,
+          status: currentData,
+        });
+      } else {
+        res.status(400).json({ message: 'Invalid GPS data received. Latitude and Longitude should be numbers.' });
+      }
+    } catch (error) {
+      console.error('Error handling GPS data:', error);
+      res.status(500).json({ message: 'Internal server error while processing GPS data.', error: error.message });
+    }
+  });
+  
 
 router.get('/state', (req, res) => {
     res.json(readData()); // Respond with the current cycle state
