@@ -2,10 +2,25 @@ const express = require('express');
 const router = express.Router();
 const History = require("../models/history"); // Import the History model
 const { restrictToLoggedinUser } = require('../middlewares/auth');
+const fs = require('fs');
+const path = require('path');
 const Cycle =require('../models/cycle');
 const { error } = require('console');
 const {sendSignalToController}=require("../middlewares/controlSignals")
-const {cycleState}=require("../models/overallStatus")
+
+const DATA_PATH = path.join(__dirname, '..', 'models', 'overallStatus.json');
+
+
+const readData = () => {
+    const rawData = fs.readFileSync(DATA_PATH);
+    return JSON.parse(rawData);
+  };
+  
+  // Helper function to write updated data back to the JSON file
+const writeData = (data) => {
+    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+};
+  
 // this is the home page for cycle
 // that's what displays cycles of user on the page 
 //it render cycles.ejs in views folder 
@@ -94,7 +109,7 @@ router.post('/location', (req, res) => {
 });
 
 router.get('/state', (req, res) => {
-    res.json(cycleState); // Respond with the current cycle state
+    res.json(readData()); // Respond with the current cycle state
 });
 
 
@@ -117,8 +132,13 @@ router.post('/lock', restrictToLoggedinUser, async (req, res) => {
         }
 
         cycle.status = 'locked';
-        cycleState.openLock=0;
         await cycle.save();
+        const currentData = readData();
+
+        // Update the object with new values if provided
+        currentData.openLock = 0;
+        // Write the updated object back to the JSON file
+        writeData(currentData);
 
         await History.create({
             userId: req.user._id,
@@ -152,8 +172,13 @@ router.post('/unlock', restrictToLoggedinUser, async (req, res) => {
         }
 
         cycle.status = 'unlocked';
-        cycleState.openLock=1;
         await cycle.save();
+        const currentData = readData();
+
+        // Update the object with new values if provided
+        currentData.openLock = 1;
+        // Write the updated object back to the JSON file
+        writeData(currentData);
 
         await History.create({
             userId: req.user._id,
