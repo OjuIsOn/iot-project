@@ -90,13 +90,20 @@ router.post('/location', (req, res) => {
     
     let latitudeInt = parseInt(latitude, 10);   // Converts to base-10 integer
     let longitudeInt = parseInt(longitude, 10);
-    if(latitudeInt*latitudeInt+longitudeInt*longitudeInt>25){
-        cycleState.buzz=1;
-        cycleState.openLock=0;
-    }
-    else{
-        cycleState.buzz=0;
-    }
+    const currentData = readData();
+
+        // Update the object with new values if provided
+
+        // Write the updated object back to the JSON file
+        
+        if(latitudeInt*latitudeInt+longitudeInt*longitudeInt>25){
+            currentData.buzz=1;
+            currentData.openLock=0;
+        }
+        else{
+            currentData.buzz=0;
+        }
+        writeData(currentData);
 
     res.status(200).json({
         message: 'Location data received successfully!',
