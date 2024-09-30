@@ -12,7 +12,7 @@ const cors = require('cors');
 console.log('MongoDB URI:', process.env.MONGODB_URI); // This should log the correct URI
 
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI,{ serverSelectionTimeoutMS: 5000})
     .then(() => {
         console.log('Database connected successfully');
     })
