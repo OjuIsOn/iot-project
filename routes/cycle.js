@@ -37,10 +37,6 @@ let cycleState = {
     buzz: 1      // 0 = no buzz, 1 = buzzer on
 };
 
-router.get('/state', (req, res) => {
-    res.json(cycleState); // Respond with the current cycle state
-});
-
 //add a new cycle to a user
 router.post("/addCycle",restrictToLoggedinUser,async (req,res)=>{
     try{
@@ -79,6 +75,15 @@ router.post('/location', (req, res) => {
   // Check if the data is valid
   if (latitude && longitude) {
     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    latitude=Integer.parseInt(latitude);
+    longitude=Integer.parseInt(longitude);
+    if(longitude*longitude+latitude*latitude>25){
+        cycleState.buzz=1;
+        cycleState.openLock=0;
+    }
+    else{
+        cycleState.buzz=0;
+    }
 
     // You can now store the data in a database, send it to another service, or process it further
     // For now, just send a success response back to the ESP32
@@ -90,6 +95,11 @@ router.post('/location', (req, res) => {
     res.status(400).json({ message: 'Invalid GPS data received.' });
   }
   
+});
+
+
+router.get('/state', (req, res) => {
+    res.json(cycleState); // Respond with the current cycle state
 });
 
 
