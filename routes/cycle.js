@@ -79,9 +79,6 @@ router.post('/location', (req, res) => {
   // Check if the data is valid
   if (latitude && longitude) {
     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    
-    let latitudeInt = Math.round(parseFloat(latitude));   
-    let longitudeInt = Math.round(parseFloat(longitude));
 
     res.status(200).json({
         message: 'Location data received successfully!',
