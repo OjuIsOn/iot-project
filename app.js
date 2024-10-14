@@ -47,6 +47,7 @@ app.get('/api/maps', (req, res) => {
   });
 
 app.post('/api/sos',(req,res)=>{
+    console.log("request received here!");
     try{
         const {flag}=req.body;
         res.status(400).json({ message: 'sos recieved' });
