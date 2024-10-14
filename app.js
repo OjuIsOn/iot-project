@@ -46,6 +46,16 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
+app.post('/api/sos',(req,res)=>{
+    try{
+        const {flag}=req.body;
+        res.status(400).json({ message: 'sos recieved' });
+    }
+    catch{
+        res.status(400).json({ message: 'fuckoff' });
+    }
+})
+  
 app.listen(process.env.PORT || 8000,()=>{
     console.log("Server is listening");
 })
