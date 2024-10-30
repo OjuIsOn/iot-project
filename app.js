@@ -55,8 +55,8 @@ app.post('/api/sos',async (req,res)=>{
         }
         else{
             await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: 0 });
-            res.status(400).json(req.body);
         }
+        res.status(400).json(req.body);
     }
     catch{
         res.status(400).json({ message: 'fuckoff' });
