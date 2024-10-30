@@ -29,8 +29,9 @@ app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
   
 
-app.get("/",(req,res)=>{
+app.get("/", (req,res)=>{
     res.render("home")
+
 })
 
 app.use("/api/user",userRoutes);
