@@ -21,9 +21,9 @@ mongoose.connect(process.env.MONGODB_URI,{ serverSelectionTimeoutMS: 5000})
         console.error('Database connection error:', err);
     });
 
+app.use(express.static('public'));
 app.set("view engine","ejs");
 app.set("views",path.resolve("./views"));
-app.use(express.static('public'));
 
 app.use(cors()); // To enable cross-origin requests
 app.use(cookieParser())
