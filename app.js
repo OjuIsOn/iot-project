@@ -2,7 +2,7 @@ require("dotenv").config();
 const express=require("express");
 const path=require("path")
 const mongoose=require("mongoose");
-const overall = require("../models/overallStatus");
+const overall = require("./models/overallStatus");
 const app=express(); 
 const cookieParser=require("cookie-parser");
 const { restrictToLoggedinUser } = require("./middlewares/auth");
