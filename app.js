@@ -20,12 +20,11 @@ mongoose.connect(process.env.MONGODB_URI,{ serverSelectionTimeoutMS: 5000})
     .catch(err => {
         console.error('Database connection error:', err);
     });
-
-app.use(express.static('public'));
+    
+app.use(cors()); // To enable cross-origin requests
 app.set("view engine","ejs");
 app.set("views",path.resolve("./views"));
-
-app.use(cors()); // To enable cross-origin requests
+app.use(express.static('public'));
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
   
