@@ -50,7 +50,7 @@ app.post('/api/sos',async (req,res)=>{
     console.log("request received here!");
     try{
         const {flag}=req.body;
-        if(flag=="true"){
+        if(flag==true){
             await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: 1 });
         }
         else{
