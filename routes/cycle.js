@@ -181,7 +181,7 @@ router.post('/unlock', restrictToLoggedinUser, async (req, res) => {
     cycle.status = 'unlocked';
     await cycle.save();
 
-    await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { openLock: 0 });
+    await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { openLock: 1 });
 
     await History.create({
       userId: req.user._id,
