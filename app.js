@@ -2,7 +2,7 @@ require("dotenv").config();
 const express=require("express");
 const path=require("path")
 const mongoose=require("mongoose");
-
+const overall = require("../models/overallStatus");
 const app=express(); 
 const cookieParser=require("cookie-parser");
 const { restrictToLoggedinUser } = require("./middlewares/auth");
@@ -46,10 +46,16 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
-app.post('/api/sos',(req,res)=>{
+app.post('/api/sos',async (req,res)=>{
     console.log("request received here!");
     try{
         const {flag}=req.body;
+        if(flag){
+            await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: 1 });
+        }
+        else{
+            await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: 0 });
+        }
         res.status(400).json({ message: 'sos recieved' });
     }
     catch{
