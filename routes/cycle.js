@@ -106,7 +106,6 @@ router.post('/location', async (req, res) => {
       res.status(200).json({
         message: 'Location data received successfully!',
         receivedData: req.body,
-        status: currentData,
       });
     } else {
       res.status(400).json({ message: 'Invalid GPS data received. Latitude and Longitude should be numbers.' });
