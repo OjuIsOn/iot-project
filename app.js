@@ -48,36 +48,36 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
-app.post('/api/sos',async (req,res)=>{
-    console.log("request received here!"+ req.body);
-    try{
-        const {flag}=req.body;
-        if(flag=="1"){
-            await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: 1 });
-        }
-        else{
-            await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: 0 });
-        }
-        res.status(400).json(req.body);
-    }
-    catch{
-        res.status(400).json({ message: 'off' });
-    }
-})
+  let globalBuzzValue = 0; // Global variable to store buzz value
 
-app.get('/api/sos', async (req, res) => {
-    try {
-        const document = await overall.findById('672265055d938eaea9d99fd9'); // replace with your document's ID
-        if (document) {
-            res.json({ buzz: document.buzz });  // Return the 'buzz' value as JSON
-        } else {
-            res.status(404).json({ message: 'Document not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: 'Error retrieving data' });
-    }
-});
-
+  app.post('/api/sos', async (req, res) => {
+      console.log("POST request received:", req.body);
+      try {
+          const { flag } = req.body;
+          globalBuzzValue = flag === "1" ? 1 : 0; // Update global variable
+  
+          await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: globalBuzzValue });
+  
+          res.status(200).json({ message: 'POST processed successfully', buzz: globalBuzzValue });
+      } catch (error) {
+          console.error("Error in POST request:", error.message);
+          res.status(500).json({ message: 'Server error', error: error.message });
+      }
+  });
+  
+  app.get('/api/sos', (req, res) => {
+      try {
+          if (globalBuzzValue !== null) {
+              res.json({ buzz: globalBuzzValue }); // Return the value from global variable
+          } else {
+              res.status(404).json({ message: 'Buzz value not set' });
+          }
+      } catch (error) {
+          console.error("Error in GET request:", error.message);
+          res.status(500).json({ message: 'Error retrieving data' });
+      }
+  });
+  
 
 app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
