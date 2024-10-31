@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/contact.css">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "Z9QUi_N2auTP3Np-t", 
+      });
+   })();
+</script>
+</head>
+<body>
+<nav>
+        <div class="logo">LockIt</div>
+        <div class="nav-links">
+            <a href="/" class="login-btn" style="color: white;">Login</a>
+            <a href="menu.html" class="contact-btn" style="background-color:white">Contact Us</a>
+        </div>
+    </nav>
+    <!-- views/emergency.ejs -->
+<form  action="/api/contact/store-contact" method="POST" >
+    <label for="contact">Enter Emails:</label>
+    <input type="email" id="contact" name="contact" required>
+    <button type="submit">Submit</button>
+</form>
+
+<h1>Saved Contacts</h1>
+
+  <% if (contacts && contacts.length > 0) { %>
+    <ul>
+      <% contacts.reverse().forEach(function(contact) { %>
+        <li><%= contact.contact %></li> <!-- Displays each saved contact -->
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>No contacts saved yet.</p>
+  <% } %>
+  
+  <button id="sendNotification" onclick="showContacts()">Send Notification</button>
+  
+  <script>
+  var prevFlag="0";
+    const contacts = <%- JSON.stringify(contacts) %>;
+
+    function showContacts(){
+
+    console.log("function called");
+    contacts.forEach(contact =>{ emailjs.send("service_ebihtpk","template_4nanskv",{email: contact.contact,}) });
+    }
+
+    setInterval(() => {
+      fetch('localhost:8001/api/sos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ flag: "1" }) // or whatever flag you want to send
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.flag!=prevFlag && data.flag === "1") {
+                showContacts();
+            }
+
+            prevFlag=data.flag;
+        })
+        .catch(error => console.error("Error fetching flag:", error));
+    }, 5000);
+    
+
+  </script>
+</body>
+</html>
