@@ -65,6 +65,20 @@ app.post('/api/sos',async (req,res)=>{
     }
 })
 
+app.get('/api/sos', async (req, res) => {
+    try {
+        const document = await overall.findById('672265055d938eaea9d99fd9'); // replace with your document's ID
+        if (document) {
+            res.json({ buzz: document.buzz });  // Return the 'buzz' value as JSON
+        } else {
+            res.status(404).json({ message: 'Document not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving data' });
+    }
+});
+
+
 app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
 app.listen(process.env.PORT || 8000,()=>{
