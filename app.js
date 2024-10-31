@@ -11,6 +11,7 @@ const cycleRoutes=require("./routes/cycle");
 const { nextTick } = require("process");
 const cors = require('cors');
 const contactRouter = require('./routes/contact');
+const { receiveDataFromSos, fetchSosDataFromDB } = require("./controller/sos");
 console.log('MongoDB URI:', process.env.MONGODB_URI); // This should log the correct URI
 
 
@@ -48,37 +49,9 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
-  app.post('/api/sos', async (req, res) => {
-    console.log("POST request received:", req.body);
-    try {
-        const { flag } = req.body;
-        const buzzValue = flag === "1" ? 1 : 0;
+app.post('/api/sos', receiveDataFromSos);
 
-        // Update the database with the new buzz value
-        await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: buzzValue });
-
-        res.status(200).json({ message: 'POST processed successfully', buzz: buzzValue });
-    } catch (error) {
-        console.error("Error in POST request:", error.message);
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-});
-
-app.get('/api/sos', async (req, res) => {
-    try {
-        const document = await overall.findById('672265055d938eaea9d99fd9');
-        if (document) {
-            res.json({ buzz: document.buzz }); // Return the current buzz value from the database
-        } else {
-            res.status(404).json({ message: 'Document not found' });
-        }
-    } catch (error) {
-        console.error("Error in GET request:", error.message);
-        res.status(500).json({ message: 'Error retrieving data' });
-    }
-});
-
-  
+app.get('/api/sos', fetchSosDataFromDB);
 
 app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
