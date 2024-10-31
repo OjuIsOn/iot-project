@@ -31,7 +31,7 @@ Router.post("/register",async (req,res)=>{
             password:password,
             cycleNum:cycleNum
         }).then(User => {
-            res.redirect("/api/cycle");
+            res.redirect("/api/login");
         })
         .catch(error => {
             
