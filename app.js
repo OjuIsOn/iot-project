@@ -48,37 +48,50 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
-  let globalBuzzValue = null; // Global variable to store buzz value
+  class BuzzValueManager {
+    constructor() {
+        this.buzzValue = null;
+    }
 
-  app.post('/api/sos', async (req, res) => {
-      console.log("POST request received:", req.body);
-      try {
-          const { flag } = req.body;
-          globalBuzzValue = flag === "1" ? 1 : 0; // Update global variable
-  
-          await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: globalBuzzValue });
-  
-          res.status(200).json({ message: 'POST processed successfully', buzz: globalBuzzValue });
-      } catch (error) {
-          console.error("Error in POST request:", error.message);
-          res.status(500).json({ message: 'Server error', error: error.message });
-      }
-  });
-  
-  app.get('/api/sos', (req, res) => {
-      console.log(globalBuzzValue);
+    setBuzz(value) {
+        this.buzzValue = value;
+    }
+
+    getBuzz() {
+        return this.buzzValue;
+    }
+}
+
+const buzzValueManager = new BuzzValueManager();
+
+app.post('/api/sos', async (req, res) => {
+    console.log("POST request received:", req.body);
     try {
-          if (globalBuzzValue !== null) {
-              res.json({ buzz: globalBuzzValue }); // Return the value from global variable
-          } else {
-              res.status(404).json({ message: 'Buzz value not set' });
-          }
-      } catch (error) {
-          console.error("Error in GET request:", error.message);
-          res.status(500).json({ message: 'Error retrieving data' });
-      }
-  });
-  
+        const { flag } = req.body;
+        const buzzValue = flag === "1" ? 1 : 0;
+
+        // Update the buzz value in the singleton manager
+        buzzValueManager.setBuzz(buzzValue);
+
+        // Update the database
+        await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: buzzValue });
+
+        res.status(200).json({ message: 'POST processed successfully', buzz: buzzValue });
+    } catch (error) {
+        console.error("Error in POST request:", error.message);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+app.get('/api/sos', (req, res) => {
+    const buzzValue = buzzValueManager.getBuzz();
+    if (buzzValue !== null) {
+        res.json({ buzz: buzzValue }); // Return the buzz value from the singleton
+    } else {
+        res.status(404).json({ message: 'Buzz value not set' });
+    }
+});
+
 
 app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
