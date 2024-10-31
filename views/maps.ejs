@@ -47,34 +47,34 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
-var lat=30.180607;
-var lng=77.274371;
+var lat=29.945564;
+var lng=76.816046;
 
 var slat=29.945562;
 var slng=76.816041;
 
-function showLocation(){
-    navigator.geolocation.getCurrentPosition(locatedpos,errorfunc,{
-            enableHighAccuracy: true,
-            timeout: 1000,
-            maximumAge: 0
-        });
-}
+// function showLocation(){
+//     navigator.geolocation.getCurrentPosition(locatedpos,errorfunc,{
+//             enableHighAccuracy: true,
+//             timeout: 1000,
+//             maximumAge: 0
+//         });
+// }
 
 
-async function locatedpos(position){
-    slat = position.coords.latitude + 0.235043;
-    slng = position.coords.longitude + 0.457847;
-    console.log(slat);
-    console.log(slng);
-    console.log(position);
-}
+// async function locatedpos(position){
+//     slat = position.coords.latitude + 0.235043;
+//     slng = position.coords.longitude + 0.457847;
+//     console.log(slat);
+//     console.log(slng);
+//     console.log(position);
+// }
 
-function errorfunc(){
-    console.log("There is some error");
-}
+// function errorfunc(){
+//     console.log("There is some error");
+// }
 
-showLocation();
+// showLocation();
 
 navigator.geolocation.watchPosition(success, error, {
     enableHighAccuracy: true, // Use GPS and other high-accuracy methods
@@ -105,7 +105,7 @@ function success(pos){
     }
 
     marker=L.marker([lat,lng]).addTo(map);
-    circle=L.circle([lat,lng], { radius: 2000}).addTo(map);
+    circle=L.circle([lat,lng], { radius: 100}).addTo(map);
 
     L.marker([slat,slng], { icon: squareIcon }).addTo(map)
             .bindPopup('I am a square-shaped marker!');
@@ -116,8 +116,8 @@ function success(pos){
     var distance = calculateDistance(lat, lng, slat, slng);
     console.log(distance);
 
-// Check if the distance exceeds 500 meters
-    if (distance > 2000) {
+// Check if the distance exceeds 100 meters
+    if (distance > 100) {
     console.log("The cycle is outside fencing zone");
     const element = document.getElementById("map");
     element.style.border = "7px dotted red";

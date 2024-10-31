@@ -96,7 +96,7 @@ router.post('/location', async (req, res) => {
 
       const distanceSquared = latitudeFloat * latitudeFloat + longitudeFloat * longitudeFloat;
 
-      if (distanceSquared > 25) {
+      if (distanceSquared > 10000) {
 
         await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { openLock: 0, buzz: 1 });
       } else {
