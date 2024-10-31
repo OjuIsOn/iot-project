@@ -48,32 +48,13 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
-  class BuzzValueManager {
-    constructor() {
-        this.buzzValue = null;
-    }
-
-    setBuzz(value) {
-        this.buzzValue = value;
-    }
-
-    getBuzz() {
-        return this.buzzValue;
-    }
-}
-
-const buzzValueManager = new BuzzValueManager();
-
-app.post('/api/sos', async (req, res) => {
+  app.post('/api/sos', async (req, res) => {
     console.log("POST request received:", req.body);
     try {
         const { flag } = req.body;
         const buzzValue = flag === "1" ? 1 : 0;
 
-        // Update the buzz value in the singleton manager
-        buzzValueManager.setBuzz(buzzValue);
-
-        // Update the database
+        // Update the database with the new buzz value
         await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { buzz: buzzValue });
 
         res.status(200).json({ message: 'POST processed successfully', buzz: buzzValue });
@@ -83,15 +64,21 @@ app.post('/api/sos', async (req, res) => {
     }
 });
 
-app.get('/api/sos', (req, res) => {
-    const buzzValue = buzzValueManager.getBuzz();
-    if (buzzValue !== null) {
-        res.json({ buzz: buzzValue }); // Return the buzz value from the singleton
-    } else {
-        res.status(404).json({ message: 'Buzz value not set' });
+app.get('/api/sos', async (req, res) => {
+    try {
+        const document = await overall.findById('672265055d938eaea9d99fd9');
+        if (document) {
+            res.json({ buzz: document.buzz }); // Return the current buzz value from the database
+        } else {
+            res.status(404).json({ message: 'Document not found' });
+        }
+    } catch (error) {
+        console.error("Error in GET request:", error.message);
+        res.status(500).json({ message: 'Error retrieving data' });
     }
 });
 
+  
 
 app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
