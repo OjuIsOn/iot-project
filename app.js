@@ -28,6 +28,7 @@ app.set("views",path.resolve("./views"));
 app.use(express.static('public'));
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
+app.use(express.json());
   
 
 app.get("/", (req,res)=>{
@@ -48,7 +49,7 @@ app.get('/api/maps', (req, res) => {
   });
 
 app.post('/api/sos',async (req,res)=>{
-    console.log("request received here!");
+    console.log("request received here!"+ req.body);
     try{
         const {flag}=req.body;
         if(flag=="1"){
