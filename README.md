@@ -1,4 +1,4 @@
-first login to mongodb :
+<!-- first login to mongodb :
     1.You can do it online 
     2.Install locally 
     3.add the connection string in env file (make it a string)
@@ -44,4 +44,10 @@ just to specification
   post-  /api/cycle/lock             for locking
   post-  /api/cycle/unlock           for unlocking
   post-  /api/cycle/addCycle         for adding a new cycle
+ -->
 
+
+
+just run app.js file 
+open chrome and type 
+http://localhost:8001
