@@ -80,13 +80,13 @@ router.post("/addCycle", restrictToLoggedinUser, async (req, res) => {
 
 
 
-router.post('/location',restrictToLoggedinUser, async (req, res) => {
+router.post('/location', async (req, res) => {
   try {
     console.log('Received GPS data:', req.body);
 
-    const { latitude, longitude } = req.body;
+    const { latitude, longitude, id } = req.body;
 
-    const user1=await User.findById(req.user._id);
+    const user1=await User.findById(id);
     const lat=user1.lat;
     const long= user1.long;
 
