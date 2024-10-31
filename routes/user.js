@@ -31,7 +31,7 @@ Router.post("/register",async (req,res)=>{
             password:password,
             cycleNum:cycleNum
         }).then(User => {
-            res.redirect("/api/cycle");
+            res.redirect("/api/user/login");
         })
         .catch(error => {
             
@@ -67,6 +67,16 @@ Router.post("/login",async (req,res)=>{
     res.redirect("/api/menu");
 
 })
+
+Router.get('/configurations',async (req,res) => {
+    try {
+    const users = await User.find(); // Fetch all users
+    res.render('configurations', { users }); // Render the EJS template and pass the users data
+} catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching users');
+}
+});
 
 Router.get('/history', restrictToLoggedinUser, async (req, res) => {
     try {
