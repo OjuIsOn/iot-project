@@ -68,6 +68,16 @@ Router.post("/login",async (req,res)=>{
 
 })
 
+Router.get('/configurations',async (req,res) => {
+    try {
+    const users = await User.find(); // Fetch all users
+    res.render('configurations', { users }); // Render the EJS template and pass the users data
+} catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching users');
+}
+});
+
 Router.get('/history', restrictToLoggedinUser, async (req, res) => {
     try {
         const history = await History.find({ userId: req.user._id }).sort({ timestamp: -1 });
