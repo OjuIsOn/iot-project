@@ -10,6 +10,7 @@ const userRoutes=require("./routes/user");
 const cycleRoutes=require("./routes/cycle");
 const { nextTick } = require("process");
 const cors = require('cors');
+const contactRouter = require('./routes/contact');
 console.log('MongoDB URI:', process.env.MONGODB_URI); // This should log the correct URI
 
 
@@ -27,6 +28,7 @@ app.set("views",path.resolve("./views"));
 app.use(express.static('public'));
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
+app.use(express.json());
   
 
 app.get("/", (req,res)=>{
@@ -47,7 +49,7 @@ app.get('/api/maps', (req, res) => {
   });
 
 app.post('/api/sos',async (req,res)=>{
-    console.log("request received here!");
+    console.log("request received here!"+ req.body);
     try{
         const {flag}=req.body;
         if(flag=="1"){
@@ -59,9 +61,23 @@ app.post('/api/sos',async (req,res)=>{
         res.status(400).json(req.body);
     }
     catch{
-        res.status(400).json({ message: 'fuckoff' });
+        res.status(400).json({ message: 'off' });
     }
 })
+
+app.get('/api/sos', async (req, res) => {
+    try {
+        const document = await overall.findById('672265055d938eaea9d99fd9'); // replace with your document's ID
+        if (document) {
+            res.json({ buzz: document.buzz });  // Return the 'buzz' value as JSON
+        } else {
+            res.status(404).json({ message: 'Document not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving data' });
+    }
+});
+
 
 app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
@@ -69,6 +85,4 @@ app.listen(process.env.PORT || 8000,()=>{
     console.log("Server is listening");
 })
 
-
 //https://1c43-49-156-109-221.ngrok-free.app/
-
