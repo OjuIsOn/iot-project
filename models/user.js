@@ -4,7 +4,9 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true},
   email: { type: String, required: true },
   password: { type: String, required: true },
-  cycleNum:{ type:String,required:true}
+  cycleNum:{ type:String,required:true},
+  lat:{type:Number,required:false,default:0},
+  long:{type:Number,required:false,default:0},
 });
 
 const User = mongoose.model('User', userSchema);

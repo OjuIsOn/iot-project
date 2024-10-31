@@ -87,4 +87,21 @@ Router.get('/history', restrictToLoggedinUser, async (req, res) => {
     }
 });
 
+Router.post('/updatelocation',restrictToLoggedinUser, async (req, res) => {
+    const { lat, long } = req.body; 
+  
+    try {
+      const userId = req.user._id;
+      console.log(userId);
+      console.log(lat,long);
+      await User.findByIdAndUpdate(userId, { lat:lat, long:long });
+  
+      res.status(200).json({ message: 'Location updated successfully!' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error updating location' });
+    }
+  });
+  
+
 module.exports=Router

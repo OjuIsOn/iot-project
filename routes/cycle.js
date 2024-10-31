@@ -9,25 +9,23 @@ const { error } = require('console');
 const { sendSignalToController } = require("../middlewares/controlSignals")
 const overall = require("../models/overallStatus");
 const DATA_PATH = path.join(__dirname, '..', 'models', 'overallStatus.json');
+const User=require('../models/user');
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371e3; // Radius of the Earth in meters
+  var φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+  var φ2 = lat2 * Math.PI / 180;
+  var Δφ = (lat2 - lat1) * Math.PI / 180;
+  var Δλ = (lon2 - lon1) * Math.PI / 180;
 
-function readData() {
-  try {
-    const rawData = fs.readFileSync(DATA_PATH, 'utf8');
-    return JSON.parse(rawData);
-  } catch (error) {
-    console.error('Error reading data from file:', error);
-    return {};
-  }
+  var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+          Math.cos(φ1) * Math.cos(φ2) *
+          Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  var distance = R * c; // in meters
+  return distance;
 }
 
-function writeData(data) {
-  try {
-    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
-    console.log('Data written to file successfully.');
-  } catch (error) {
-    console.error('Error writing data to file:', error);
-  }
-}
 // this is the home page for cycle
 // that's what displays cycles of user on the page 
 //it render cycles.ejs in views folder 
@@ -82,11 +80,15 @@ router.post("/addCycle", restrictToLoggedinUser, async (req, res) => {
 
 
 
-router.post('/location', async (req, res) => {
+router.post('/location',restrictToLoggedinUser, async (req, res) => {
   try {
     console.log('Received GPS data:', req.body);
 
     const { latitude, longitude } = req.body;
+
+    const user1=await User.findById(req.user._id);
+    const lat=user1.lat;
+    const long= user1.long;
 
     if (!isNaN(latitude) && !isNaN(longitude)) {
       const latitudeFloat = parseFloat(latitude);
@@ -94,9 +96,9 @@ router.post('/location', async (req, res) => {
 
       console.log(`Latitude: ${latitudeFloat}, Longitude: ${longitudeFloat}`);
 
-      const distanceSquared = latitudeFloat * latitudeFloat + longitudeFloat * longitudeFloat;
-
-      if (distanceSquared > 10000) {
+      const distanceSquared = calculateDistance(lat,long,latitudeFloat,longitudeFloat);
+      console.log(distanceSquared);
+      if (distanceSquared > 500) {
 
         await overall.findByIdAndUpdate('672265055d938eaea9d99fd9', { openLock: 0, buzz: 1 });
       } else {
