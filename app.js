@@ -66,7 +66,8 @@ app.get('/api/maps', (req, res) => {
   });
   
   app.get('/api/sos', (req, res) => {
-      try {
+      console.log(globalBuzzValue);
+    try {
           if (globalBuzzValue !== null) {
               res.json({ buzz: globalBuzzValue }); // Return the value from global variable
           } else {
