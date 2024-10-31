@@ -60,9 +60,9 @@
       fetch('/api/sos', {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded', // Ensures JSON data is properly read on the server
+        'Content-Type': 'application/x-www-form-urlencoded', // Specify URL-encoded content type
     },
-    body: JSON.stringify({ flag: "0" }) // Convert your data to JSON
+    body: new URLSearchParams({ flag: "1" }) // Encode data as URL parameters
 })
         .then(response => response.json())
         .then(data => {
