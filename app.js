@@ -48,7 +48,7 @@ app.get('/api/maps', (req, res) => {
     res.render('maps'); // Renders the 'second-page.ejs' template
   });
 
-  let globalBuzzValue = 0; // Global variable to store buzz value
+  let globalBuzzValue = null; // Global variable to store buzz value
 
   app.post('/api/sos', async (req, res) => {
       console.log("POST request received:", req.body);
