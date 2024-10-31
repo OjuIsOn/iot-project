@@ -62,6 +62,8 @@ app.post('/api/sos',async (req,res)=>{
         res.status(400).json({ message: 'fuckoff' });
     }
 })
+
+app.use("/api/contact",restrictToLoggedinUser, contactRouter); // Use the new route
   
 app.listen(process.env.PORT || 8000,()=>{
     console.log("Server is listening");
